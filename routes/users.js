@@ -6,8 +6,11 @@ const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const validateToken = require("../auth/validateToken.js")
+const multer = require("multer")
+const storage = multer.memoryStorage();
+const upload = multer( {storage} )
 
-
+//remove all user data
 router.get("/nukedatabase", (req, res) => {
   User.remove({}, (err, count) => {
     if (err) {
@@ -17,32 +20,39 @@ router.get("/nukedatabase", (req, res) => {
   });
 });
 
+//remove a user from list view
 router.get("/removeuser", (req, res) => {
   //console.log(reg);
-  res.redirect("/");
-  /*User.remove({}, (err, count) => {
-    if (err) {
-      throw err;
-    }
-    res.status(403).json( {message: "database nuked maybe", count: count} );
-  });*/
+  console.log(req.header.adminpriviledges);
+  if (req.header.adminpriviledges) {
+    User.deleteOne({ username: req.body.username }, (err) => {
+      if (err) {
+        //throw err;
+        res.json({success: false});
+      }
+      else {
+        res.json({success: true});
+      }
+    });
+  }
 });
 
+//legacy removal way
 router.post("/removeuser", body("username"), (req, res) => {
   //console.log(req);
-  console.log(req.body.username);
+  //console.log(req.body.username);
   User.deleteOne({ username: req.body.username }, (err) => {
     if (err) {
       throw err;
     }
     //res.status(403).json( {message: "dude nuked maybe"} );
   });
-  res.redirect("/users/list");
+  res.render("/list");
 });
 
 
 /* GET users listing. , validateToken*/
-router.get("/list", (req, res, next) => {
+router.get("/list", validateToken, (req, res, next) => {
   User.find({}, (err, users) =>{
     if(err) {
       return next(err)
@@ -55,7 +65,7 @@ router.get("/login", (req, res, next) => {
   res.render("login");
 });
 
-router.post("/login", body("username").trim().escape(), body("password").escape(), (req, res, next) => {
+router.post("/login", upload.none(), (req, res, next) => {
   User.findOne( { username: req.body.username }, (err, user) =>{
     if (err) {
       throw err;
@@ -71,7 +81,8 @@ router.post("/login", body("username").trim().escape(), body("password").escape(
         if (isMatch) {
           const payload = {
             id: user._id,
-            username: user.username
+            username: user.username,
+            admin: true
           }
           jwt.sign(
             payload,
@@ -80,10 +91,9 @@ router.post("/login", body("username").trim().escape(), body("password").escape(
               expiresIn: 120
             },
             (err, token) => {
-              res.json({success: true, token});
+              res.json({success: true, token, username: user.username, admin: payload.admin});
             }
           );
-          return res.redirect("/");
         }
       });
     }

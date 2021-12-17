@@ -8,8 +8,9 @@ const path = require("path");
 const port = 5000;
 const mongoose = require("mongoose");
 
-const index = require('./routes/index');
-const users= require('./routes/users');
+const index = require("./routes/index");
+const users = require("./routes/users");
+const threads = require("./routes/threads");
 
 
 const app = express();
@@ -37,8 +38,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use('/', index);
-app.use('/users', users);
+app.use("/", index);
+app.use("/users", users);
+app.use("/threads", threads);
 
 //in case of 404
 app.use(function(req, res, next) {

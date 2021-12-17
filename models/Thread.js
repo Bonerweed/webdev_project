@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-let threadSchema = new Schema({
+const threadSchema = new Schema({
+    title: String,
     content: String,
     author: String,
     authorID: String,

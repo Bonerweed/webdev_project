@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1= thread["title"]
+  p= thread["content"]
+  form(id= "comment-form" action="/thread/comment" method="POST")
+    input(type="hidden" name= "title" id= "title" value= thread['title'])
+    label(for="comment") Your Comment
+    input(type="comment" name="comment" id="comment" required)
+    button(class="btn" type="submit") Comment
+  script(src= "/javascript/comments.js")

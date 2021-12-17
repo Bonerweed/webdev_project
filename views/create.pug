@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1 Create Thread
+  div(id= "error" class= "card-panel")
+  form(id= "creation-form" action="/threads/create" method="POST")
+    label(for="title") Title
+    input(type="text" name="title" id="title" required)
+    label(for="content") Content
+    input(type="text-box" name="content" id="content" required)
+    button(class="btn" type="submit") Create
+  script(src= "/javascript/createThread.js")

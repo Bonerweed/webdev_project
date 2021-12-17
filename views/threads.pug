@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 List of Threads
+  button(id= "create-new") Create New
+  table
+    tr
+      th #
+      th Title
+    each thread, index in threads
+      tr
+        td= index
+        td= thread["title"]
+        td
+          button(id= 'index' value= thread["title"]  onclick= "showThread(this.value)" ) View
+  script(src= "/javascript/threads.js")

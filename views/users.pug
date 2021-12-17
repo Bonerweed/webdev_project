@@ -1,5 +1,3 @@
-extends layout
-
 block content
   h1 List of users
   table
@@ -16,6 +14,5 @@ block content
         td= user["username"]
         td= user["password"]
         td
-          form(action="/users/removeUser" method="POST")
-            input(type="hidden" name= "username" value= user['username'])
-            button(class="btn" type="submit") Remove
+          button(id= index onclick= removeUser)
+  script(src= "/javascript/users.js")

@@ -2,9 +2,11 @@ extends layout
 
 block content
   h1 Login
-  form(action="/users/login" method="POST")
-    label(for="username") Username
-    input(type="text" name="username" id="username" required)
-    label(for="password") Password
-    input(type="password" name="password" id="password" required)
-    button(class="btn" type="submit") Login
+  div(id= "error" class= "card-panel")
+  form(id= "login-form" action= "/users/login" method="POST")
+    label(for= "username") Username
+    input(type= "text" name= "username" id= "username" required)
+    label(for= "password") Password
+    input(type= "password" name= "password" id= "password" required)
+    button(class= "btn" type= "submit") Login
+  script(src= "/javascript/login.js")
