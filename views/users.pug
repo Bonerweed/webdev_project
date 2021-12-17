@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1 List of users
+  table
+    tr
+      th #
+      th ID
+      th Username
+      th Password
+      th Remove
+    each user, index in users
+      tr
+        td= index
+        td= user["id"]
+        td= user["username"]
+        td= user["password"]
+        td
+          form(action="/users/removeUser" method="POST")
+            input(type="hidden" name= "username" value= user['username'])
+            button(class="btn" type="submit") Remove
