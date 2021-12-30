@@ -6,7 +6,7 @@ if (document.readyState !== "loading") {
       initialize();
   });
 }
-
+//the most basic finctionalities
 function initialize() {
   document.getElementById("logout").removeEventListener("click", logout);
   document.getElementById("logout").addEventListener("click", logout);

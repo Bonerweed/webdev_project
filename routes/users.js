@@ -5,23 +5,23 @@ const mongoose = require("mongoose");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const validateToken = require("../auth/validateToken.js")
-const multer = require("multer")
+const validateToken = require("../auth/validateToken.js");
+const multer = require("multer");
 const storage = multer.memoryStorage();
-const upload = multer( {storage} )
+const upload = multer( {storage} );
 
 //remove all user data
-router.get("/nukedatabase", (req, res) => {
+/*router.get("/nukedatabase", (req, res) => {
   User.remove({}, (err, count) => {
     if (err) {
       throw err;
     }
     res.status(403).json( {message: "database nuked maybe", count: count} );
   });
-});
+});*/
 
-//remove a user from list view
-router.get("/removeuser", (req, res) => {
+//remove a user from list view (currently obsolete)
+/*router.get("/removeuser", (req, res) => {
   //console.log(reg);
   console.log(req.header.adminpriviledges);
   if (req.header.adminpriviledges) {
@@ -35,36 +35,27 @@ router.get("/removeuser", (req, res) => {
       }
     });
   }
-});
-
-//legacy removal way
-router.post("/removeuser", body("username"), (req, res) => {
-  //console.log(req);
-  //console.log(req.body.username);
-  User.deleteOne({ username: req.body.username }, (err) => {
-    if (err) {
-      throw err;
-    }
-    //res.status(403).json( {message: "dude nuked maybe"} );
-  });
-  res.render("/list");
-});
+});*/
 
 
 /* GET users listing. , validateToken*/
-router.get("/list", validateToken, (req, res, next) => {
+/*router.get("/list", validateToken, (req, res, next) => {
   User.find({}, (err, users) =>{
     if(err) {
       return next(err)
     };
     res.render("users", {users});
   })
-});
+});*/
 
+
+//render login page
 router.get("/login", (req, res, next) => {
   res.render("login");
 });
 
+
+//authenticate login, and generate a auth token for the session
 router.post("/login", upload.none(), (req, res, next) => {
   User.findOne( { username: req.body.username }, (err, user) =>{
     if (err) {
@@ -82,13 +73,13 @@ router.post("/login", upload.none(), (req, res, next) => {
           const payload = {
             id: user._id,
             username: user.username,
-            admin: true
+            admin: user.admin
           }
           jwt.sign(
             payload,
             process.env.SECRET,
             {
-              expiresIn: 120
+              expiresIn: 7200
             },
             (err, token) => {
               res.json({success: true, token, username: user.username, admin: payload.admin});
@@ -101,11 +92,12 @@ router.post("/login", upload.none(), (req, res, next) => {
 });
 
 
-
+//render register screen
 router.get("/register", (req, res, next) => {
   res.render("register");
 });
 
+//handle registration
 router.post("/register", body("username").isLength( {min: 1} ).trim().escape(), body("password").isLength( {min: 1} ), (req, res, next) => {
     const errors = validationResult(req);
     if ( !errors.isEmpty() ) {
@@ -128,7 +120,8 @@ router.post("/register", body("username").isLength( {min: 1} ).trim().escape(), 
             User.create(
               {
                 username: req.body.username,
-                password: hash
+                password: hash,
+                admin: false
               },
               (err, ok) => {
                 if (err) {

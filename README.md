@@ -6,13 +6,13 @@ Oh boy documentation!
 1) clone repositroy
 2) run npm install
 3) start server with npm start
-  3.a) by default project runs on localhost:3000
-~~4) suffer~~
+4) by default project runs on localhost:3000
 
 #Troubleshooting:
 - make sure you have mongoDB installed
   - current branch is running on version 4.2.17
 - project has been developed on Windows architecture, so GNU and OSX users might run into issues caused by case sensitive typoes
+- in order to give a newly registrated user admin rights, one must manually set them to *true* over at '/routes/users.js:124'
 
 
 #Features:
@@ -20,20 +20,14 @@ Oh boy documentation!
 - JWT authentication
 - non-registered viewers can still view threads and comments
 - registered and logged in users can start new threads and comment exiting ones
-- people with special permissions can do other administrative chaos such as removing users
+- thread authors can edit their threads, and system shows if a thread has been edited
+- admins can delete unruly threads
+- ui scales to screens
 
 #used tech:
 - MongoDB and Mongoose
+- pug
+- materialize
 
 #Currently know issues:
-- visual look is quite ascetic
-- sometimes token authorization fails
-- logging out has some interesting "features" and only works in localhost:300/
-- viewing a thread has routing issues
-  - a hardcoded proof of concept might be available over at '/threads/comments'
-- code attempts to be self-describing, so commenting is a bit scarce
-
-#After biggest hurdles are cleared, you can expect:
-- editing threads, and see if it has been edited
-- less eye-bleeding look
-- inner-workings-for-dummies comments
+- database might be empty upon cloning repo, but trust me you'll not miss anything important

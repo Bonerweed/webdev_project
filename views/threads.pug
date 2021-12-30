@@ -1,10 +1,13 @@
 extends layout
 
 block content
-  h1 List of Threads
-  button(id= "create-new") Create New
-  table
-    tr
+  h1(class = "centered") List of Threads
+  button(id= "create-new" class = "btn waves-effect waves-dark") Create New
+  div(class = "col s3 m3 l3")
+    button(id="back" onclick="backTen()") <
+    button(id="forward" onclick="forwardTen()") >
+  table( class = "centered highlight s8 m6 l6")
+    tr(id = "thread-table")
       th #
       th Title
     each thread, index in threads
@@ -12,5 +15,6 @@ block content
         td= index
         td= thread["title"]
         td
-          button(id= 'index' value= thread["title"]  onclick= "showThread(this.value)" ) View
+          button(id= "index" class = "btn waves-effect waves-dark" value= thread["title"]  onclick= "showThread(this.value)" ) View
+          button(id= "index" class = "btn waves-effect waves-dark" value= thread["title"]  onclick= "nukeThread(this.value)" ) Nuke
   script(src= "/javascript/threads.js")

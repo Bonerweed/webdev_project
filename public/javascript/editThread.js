@@ -7,30 +7,28 @@ if (document.readyState !== "loading") {
   });
 };
 
-//get elements we need to lsiten to
 function initialize() {
   document.getElementById("creation-form").addEventListener("submit", onSubmit);
   document.getElementById("logout").removeEventListener("click", logout);
   document.getElementById("logout").addEventListener("click", logout);
 };
 
-//listen to the request to submit a new thread, send to backend
+//listen to submit, send form data to backend
 function onSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
-    formData.append("user", localStorage.getItem("user"));
-    fetch("/threads/create", {
+    formData.append("username", localStorage.getItem("user"));
+    fetch(`/threads/edit/`, {
         method: "POST",
         body: formData
     }).then((response) => response.json())
       .then((data) => {
         if (data.success) {
-            //reload the thread list
-            window.location.href = "/threads/list"
+            //reload the thread on success
+            window.location.href = `/threads/comments/${data.title}`
         }
         else {
-            //redirect the user the main view should things go bad
-            window.location.href = "/"
+            window.location.href = "/threads/list"
         }
       });
 };

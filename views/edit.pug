@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h2= Edit
+  h3= thread['title']
+  form(id= "creation-form" action="/threads/edit/#{thread['title']}" method="POST")
+    input(type="hidden" name= "title" id= "title" value= thread['title'])
+    label(for="content") Content
+    textarea(type="content" name="content" id="content" rows = "4" cols = "50" required) #{thread['content']}
+    button(class="btn" type="submit") Edit
+  script(src= "/javascript/editThread.js")

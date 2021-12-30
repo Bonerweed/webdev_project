@@ -1,11 +1,32 @@
 extends layout
 
 block content
-  h1= thread["title"]
-  p= thread["content"]
-  form(id= "comment-form" action="/thread/comment" method="POST")
-    input(type="hidden" name= "title" id= "title" value= thread['title'])
-    label(for="comment") Your Comment
-    input(type="comment" name="comment" id="comment" required)
-    button(class="btn" type="submit") Comment
-  script(src= "/javascript/comments.js")
+    h2= thread["title"]
+    button(class="btn waves-effect waves-dark" id="edit-button" value= thread["title"] onclick= "onEdit(this.value)") Edit
+    div(id="authordiv")
+        span by <b>
+        span(id = "authorspan") #{thread["author"]}
+        span </b>
+        if thread["edited"] === true
+            span  last edited
+        span  on #{thread["date"]}
+    hr
+    div(class = "col s8")
+        pre(class = "flow-text")= thread["content"]
+        hr
+    div(class = "centered s12")
+        h4= "Comments:"
+        ul(class = "collection")
+            each comment in comments
+                li(class = "collection-item")
+                    div()
+                        label(for= comment["id"]) <b>#{comment['author']}</b> on #{comment['date']}
+                        pre(id= comment["id"])= comment["content"]
+                li(class="divider")
+    div(class = "col s8 blue-grey")
+        form(id= "comment-form" action="/thread/comment" method="POST")
+            input(type="hidden" name= "title" id= "title" value= thread['title'])
+            label(for="comment") Your Comment
+            textarea(type="comment" name="comment" id="comment" rows = "4" cols = "50" required)
+            button(class="btn waves-effect waves-dark" type="submit") Comment
+    script(src= "/javascript/comments.js")

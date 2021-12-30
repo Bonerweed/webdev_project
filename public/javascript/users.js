@@ -8,13 +8,16 @@ if (document.readyState !== "loading") {
 }
 
 function initialize() {
-  document.getElementById("list").addEventListener("click", listOfUsers);
-  document.getElementById("logout").removeEventListener("click", logout);
+  //document.getElementById("list").addEventListener("click", listOfUsers);
+  let old_logout = document.getElementById("logout");
+  let new_logout = old_logout.cloneNode(true);
+  old_logout.parentNode.replaceChild(new_logout, old_logout);
+  //document.getElementById("logout").removeEventListener("click", logout);
   document.getElementById("logout").addEventListener("click", logout);
 }
 
-
-function listOfUsers(event) {
+//Old request for list of users, no longer supported
+/*function listOfUsers(event) {
   event.preventDefault();
   const authToken = localStorage.getItem("auth_token");
   console.log("authtoken: ", authToken);
@@ -33,9 +36,11 @@ function listOfUsers(event) {
     .catch((e) => {
         console.log("error" + e);
     });
-}
+}*/
 
-function removeUser(event) {
+//old call for removal of user, no longer supported
+
+/*function removeUser(event) {
   event.preventDefault();
   const adminToken = localStorage.getItem("admin_token");
   if (!adminToken) {
@@ -56,7 +61,7 @@ function removeUser(event) {
         window.location.href = "/";
       }
     });
-}
+}*/
 
 
 function logout() {
